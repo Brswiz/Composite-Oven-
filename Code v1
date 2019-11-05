@@ -1,0 +1,88 @@
+
+
+###Temp sensor setup
+#!/usr/bin/env python
+import os
+import time
+###### Relay Setup
+import RPi.GPIO as GPIO
+GPIO.setmode(GPIO.BCM) # GPIO Numbers instead of board numbers
+Relay_1 = 17 ##Heat Light
+Relay_2 = 4   ### Circulation Fan
+Relay_3 = 27  ### Cool Air Fan
+GPIO.setup(Relay_1, GPIO.OUT) # GPIO Assign mode --Heat Light
+GPIO.setup(Relay_2, GPIO.OUT) # GPIO Assign mode --Circulation fan
+GPIO.setup(Relay_3, GPIO.OUT) # GPIO Assign mode -- Cool Air Fan
+
+
+### Cure Parrameters
+Ramp_up = 5 ### Farenheit
+Ramp_Down = 5 ### Farenheit
+Max_Temp = 270 ### Farenheit
+Hold_time = 4  ### hours
+
+### Temperature sensor Setup
+def sensor():
+    for i in os.listdir('/sys/bus/w1/devices'):
+        if i != 'w1_bus_master1':
+            ds18b20 = i
+    return ds18b20
+
+def read(ds18b20):
+    location = '/sys/bus/w1/devices/' + ds18b20 + '/w1_slave'
+    tfile = open(location)
+    text = tfile.read()
+    tfile.close()
+    secondline = text.split("\n")[1]
+    temperaturedata = secondline.split(" ")[9]
+    temperature = float(temperaturedata[2:])
+    celsius = temperature / 1000
+    farenheit = (celsius * 1.8) + 32
+    return farenheit
+
+### Heat and Fan Control
+light_on_off = False
+Circulation_Fan = False
+C_A_Fan = False
+
+def light_on(light_on_off):
+    if Light_on_off == True:
+        GPIO.output(Relay_1, GPIO.HIGH)
+    else Light_on_off == False:
+        GPIO.output(Relay_1, GPIO.LOW)
+    return Light_on_off
+
+def Circulation_Fan(C_fan):
+    if C_fan == True:
+        GPIO.output(Relay_2, GPIO.HIGH)
+    if C_fan == False:
+        GPIO.output(Relay_2, GPIO.LOW)
+    return Circulation_Fan
+
+def Cool_Air_Fan(C_a_fan):
+    if C_A_fan == True:
+        GPIO.output(Relay_3, GPIO.HIGH)
+    if C_A_fan == False:
+        GPIO.output(Relay_3, GPIO.LOW)
+    return C_A_Fan
+
+def Rampup(Ramp_Up):
+    Temp_Ramp_Up = read(ds18b20)
+    while Temp_Ramp_Up <= Max_Temp
+
+
+
+
+### Oven Program
+def oven(Ramp_up, Ramp_Down, Max_temp, Hold_time, ds18b20):
+    done = False
+    half_minute = 0
+    while done == False and half_minute <= ((Hold_time*3600)/30):
+        temp_F = read(ds18b20)
+        print "Current temperature : %0.3F C" % read(ds18b20)[1]
+
+        if not (temp_F >= (Max_temp-5)) and (temp_F <= (Max_Temp+5)):
+
+
+        time.sleep(30)
+        Half_Minute += 1 
